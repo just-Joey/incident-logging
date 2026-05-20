@@ -1,0 +1,80 @@
+generator = client {
+provider = "prisma-client.js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+//-----ENUMS----------------------
+
+enum Severity {
+    LOW
+    MEDIUM
+    HIGH
+    CRITICAL
+}
+
+enum IncidentStatus {
+    OPEN
+    INVESTIGATING
+    IDENTIFIED
+    MONITORING
+    RESOLVED
+}
+
+enum EventType {
+    DEPLOYMENT
+    SCALING
+    AUTH
+    PAYMENT
+    SYSTEM
+    CUSTOM
+}
+
+//-----MODELS----------------------
+
+model Incident {
+    id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.gen_random_uuid
+    title       String
+    description String
+    severity    Severity       @default(MEDIUM)
+    status      IncidentStatus @default(OPEN)
+    service     String? //which service is affected
+    assignee    String? //free-form for now, could FK to a user table later
+
+    //Timestamps
+    createdAt  DateTime @default(now())
+    updateAt   DateTime @updatedAt
+    resolvedAt DateTime //null until resolvedAt
+
+    //Relations
+    errors Error[] //and incident can have many linked errors
+    events AppEvent[] //events that fired during this incident
+
+    @@map("incidents") //actual table name in postgres
+}
+
+model Error {
+    id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.gen_random_uuid
+    message     String
+    stack       String?     @db.Text
+    service     String
+    status      ErrorStatus @default(ACTIVE)
+    count       Int         @default(1) //incremented on duplicate errors
+    fingerprint String //hash of message+location for deduplication
+    metadata    Json? //any extra context as Json
+
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updateAt
+    resolvedAt DateTime?
+
+    //Relations
+    incidentId String?   @db.Uuid //optional - errors exist before incidents
+    incident   Incident? @relation(field: [incidentId], reference: [id])
+
+    @@index([fingerprint])
+    @@index([service])
+    @@map("errors")
+}
