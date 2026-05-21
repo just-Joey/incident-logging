@@ -1,5 +1,5 @@
-generator = client {
-provider = "prisma-client.js"
+generator client {
+    provider = "prisma-client-js"
 }
 
 datasource db {
@@ -24,6 +24,12 @@ enum IncidentStatus {
     RESOLVED
 }
 
+enum ErrorStatus {
+    ACTIVE
+    RESOLVED
+    IGNORED
+}
+
 enum EventType {
     DEPLOYMENT
     SCALING
@@ -36,7 +42,7 @@ enum EventType {
 //-----MODELS----------------------
 
 model Incident {
-    id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.gen_random_uuid
+    id          String         @id @default(uuid())
     title       String
     description String
     severity    Severity       @default(MEDIUM)
@@ -57,7 +63,7 @@ model Incident {
 }
 
 model Error {
-    id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.gen_random_uuid
+    id          String      @id @default(uuid())
     message     String
     stack       String?     @db.Text
     service     String
@@ -67,14 +73,48 @@ model Error {
     metadata    Json? //any extra context as Json
 
     createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updateAt
+    updatedAt  DateTime  @updatedAt
     resolvedAt DateTime?
 
     //Relations
     incidentId String?   @db.Uuid //optional - errors exist before incidents
-    incident   Incident? @relation(field: [incidentId], reference: [id])
+    incident   Incident? @relation(fields: [incidentId], references: [id])
 
     @@index([fingerprint])
     @@index([service])
     @@map("errors")
+}
+
+model AppEvent {
+    id       String    @id @default(uuid())
+    type     EventType
+    service  String
+    message  String
+    payload  Json? //any extra data about the event
+    severity Severity  @default(LOW)
+
+    createdAt DateTime @default(now())
+
+    //Optional link to an incident
+    incidentId String?   @db.Uuid
+    incident   Incident? @relation(fields: [incidentId], references: [id])
+
+    @@index([service])
+    @@index([type])
+    @@index([createdAt])
+    @@map("app_events")
+}
+
+model Dashboard {
+    id          String  @id @default(uuid())
+    name        String
+    description String?
+
+    config    Json    @default("{}") //stores widget layout and settings as JSON
+    isDefault Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("dashboards")
 }
