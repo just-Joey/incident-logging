@@ -77,7 +77,7 @@ model Error {
     resolvedAt DateTime?
 
     //Relations
-    incidentId String?   @db.Uuid //optional - errors exist before incidents
+    incidentId String?    //optional - errors exist before incidents
     incident   Incident? @relation(fields: [incidentId], references: [id])
 
     @@index([fingerprint])
@@ -96,7 +96,7 @@ model AppEvent {
     createdAt DateTime @default(now())
 
     //Optional link to an incident
-    incidentId String?   @db.Uuid
+    incidentId String?   
     incident   Incident? @relation(fields: [incidentId], references: [id])
 
     @@index([service])
