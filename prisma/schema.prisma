@@ -42,7 +42,7 @@ enum EventType {
 //-----MODELS----------------------
 
 model Incident {
-    id          String         @id @default(uuid())
+    id          String         @id @default(uuid()) 
     title       String
     description String
     severity    Severity       @default(MEDIUM)
@@ -52,8 +52,8 @@ model Incident {
 
     //Timestamps
     createdAt  DateTime @default(now())
-    updateAt   DateTime @updatedAt
-    resolvedAt DateTime //null until resolvedAt
+    updatedAt   DateTime @updatedAt
+    resolvedAt DateTime? //null until resolvedAt
 
     //Relations
     errors Error[] //and incident can have many linked errors
@@ -63,7 +63,7 @@ model Incident {
 }
 
 model Error {
-    id          String      @id @default(uuid())
+    id          String      @id @default(uuid()) 
     message     String
     stack       String?     @db.Text
     service     String
@@ -77,7 +77,7 @@ model Error {
     resolvedAt DateTime?
 
     //Relations
-    incidentId String?    //optional - errors exist before incidents
+    incidentId String?   //optional - errors exist before incidents
     incident   Incident? @relation(fields: [incidentId], references: [id])
 
     @@index([fingerprint])
@@ -86,7 +86,7 @@ model Error {
 }
 
 model AppEvent {
-    id       String    @id @default(uuid())
+    id       String    @id @default(uuid()) 
     type     EventType
     service  String
     message  String
@@ -96,7 +96,7 @@ model AppEvent {
     createdAt DateTime @default(now())
 
     //Optional link to an incident
-    incidentId String?   
+    incidentId String? 
     incident   Incident? @relation(fields: [incidentId], references: [id])
 
     @@index([service])
@@ -106,7 +106,7 @@ model AppEvent {
 }
 
 model Dashboard {
-    id          String  @id @default(uuid())
+    id          String  @id @default(uuid()) 
     name        String
     description String?
 

@@ -20,8 +20,8 @@ CREATE TABLE "incidents" (
     "service" TEXT,
     "assignee" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" TIMESTAMP(3) NOT NULL,
-    "resolvedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "resolvedAt" TIMESTAMP(3),
 
     CONSTRAINT "incidents_pkey" PRIMARY KEY ("id")
 );
@@ -39,7 +39,7 @@ CREATE TABLE "errors" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "resolvedAt" TIMESTAMP(3),
-    "incidentId" UUID,
+    "incidentId" TEXT,
 
     CONSTRAINT "errors_pkey" PRIMARY KEY ("id")
 );
@@ -53,7 +53,7 @@ CREATE TABLE "app_events" (
     "payload" JSONB,
     "severity" "Severity" NOT NULL DEFAULT 'LOW',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "incidentId" UUID,
+    "incidentId" TEXT,
 
     CONSTRAINT "app_events_pkey" PRIMARY KEY ("id")
 );
