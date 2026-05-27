@@ -1,0 +1,29 @@
+enum Severity {
+ LOW
+ MEDIUM
+ HIGH 
+ CRITICAL    
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+}
+
+enum ErrorStatus {
+  ACTIVE
+  RESOLVED
+  IGNORED
+}
+
+enum EventType {
+  DEPLOYMENT
+  SCALING
+  AUTH
+  PAYMENT
+  SYSTEM
+  CUSTOM
+}

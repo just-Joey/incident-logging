@@ -1,0 +1,45 @@
+type Incident {
+id: ID!
+title: String!
+description: String
+severity: Severity!
+status: IncidentStatus!
+service: String
+assignee: String
+createdAt: String!
+updatedAt: String!
+resolvedAt: String
+errors: [Error!]!
+events: [AppEvent!]!
+}
+
+type Query {
+incidents: [Incident!]!
+incident(id: ID!): Incident
+}
+
+type Mutation {
+createIncident(input: CreateIncidentInput!): Incident!
+updateIncident(id: ID!, input: UpdateIncidentInput!): Incident!
+resolveIncident(id: ID!): Incident!
+deleteIncident(id: ID!): Incident!
+}
+
+input CreateIncidentInput {
+title: String!
+description: String
+severity: Severity
+service: String
+assignee: String
+}
+
+input UpdateIncidentInput {
+title: String
+description: String
+severity: Severity
+status: IncidentStatus
+service: String
+assignee: String
+}
+
+

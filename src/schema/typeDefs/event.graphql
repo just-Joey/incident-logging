@@ -1,0 +1,30 @@
+type AppEvent {
+  id: ID!
+  type: EventType!
+  service: String!
+  message: String!
+  payload: String
+  severity: Severity!
+  createdAt: String!
+  incident: Incident
+}
+
+extend type Query {
+  appEvents: [AppEvent!]!
+  appEvent(id: ID!): AppEvent
+  appEventsByService(service: String!): [AppEvent!]!
+}
+
+extend type Mutation {
+  createAppEvent(input: CreateAppEventInput!): AppEvent!
+}
+
+input CreateAppEventInput {
+  type: EventType!
+  service: String!
+  message: String!
+  payload: String
+  severity: Severity!
+  incidentId: ID
+}
+

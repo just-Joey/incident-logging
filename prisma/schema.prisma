@@ -44,7 +44,7 @@ enum EventType {
 model Incident {
     id          String         @id @default(uuid()) 
     title       String
-    description String
+    description String?
     severity    Severity       @default(MEDIUM)
     status      IncidentStatus @default(OPEN)
     service     String? //which service is affected

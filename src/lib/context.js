@@ -1,4 +1,4 @@
-import prisma from  /./prisma.js';
+import prisma from  './prisma.js';
 import logger from './logger.js';
 
 export const createContext = ({req}) => {

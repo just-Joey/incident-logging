@@ -1,0 +1,34 @@
+type Error {
+  id: ID!
+  message: String!
+  stack: String
+  service: String!
+  status: ErrorStatus!
+  count: Int!
+  fingerprint: String!
+  metadata: String
+  createdAt: String!
+  updatedAt: String!
+  resolvedAt: String
+  incident: Incident
+}
+
+extend type Query {
+  errors: [Error!]!
+  error(id: ID!): Error
+  errorsByService(service: String!): [Error!]!
+}
+
+extend type Mutation {
+  createError(input: CreateErrorInput!): Error!
+  resolveError(id: ID!): Error!
+  linkErrorToIncident(errorId: ID!, incidentId: ID!): Error!
+}
+
+input CreateErrorInput {
+  message: String!
+  stack: String
+  service: String!
+  fingerprint: String!
+  metadata: String
+}

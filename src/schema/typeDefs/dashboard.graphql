@@ -1,0 +1,38 @@
+type Dashboard {
+  id: ID!
+  name: String!
+  description: String
+  config: String!
+  isDefault: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  openIncidents: Int!
+  activeErrors: Int!
+  recentEvents: [AppEvent!]!
+}
+
+extend type Query {
+  dashboards: [Dashboard!]!
+  dashboard(id: ID!): Dashboard
+  defaultDashboard: Dashboard
+}
+
+extend type Mutation {
+  createDashboard(input: CreateDashboardInput!): Dashboard!
+  updateDashboard(id: ID!, input: UpdateDashboardInput!): Dashboard!
+  deleteDashboard(id: ID!): Dashboard!
+}
+
+input CreateDashboardInput {
+  name: String!
+  description: String
+  config: String
+  isDefault: Boolean
+}
+
+input UpdateDashboardInput {
+  name: String
+  description: String
+  config: String
+  isDefault: Boolean
+}
