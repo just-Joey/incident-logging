@@ -6,6 +6,7 @@ import { typeDefs, resolvers } from './schema/index.js'
 import { createContext } from './lib/context.js'
 import logger from './lib/logger.js'
 import config from './config/index.js'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 
 const app = express()
 
@@ -13,6 +14,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: config.graphql.introspection,
+  plugins: [
+    ApolloServerPluginLandingPageLocalDefault({ embed: true })
+  ],
 })
 
 await server.start()
