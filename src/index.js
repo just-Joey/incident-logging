@@ -27,7 +27,10 @@ app.use(express.json())
 app.use(
   '/graphql',
   cors(),
-  express.json(),  // ← must be before expressMiddleware
+  express.json(),
+  // Express v5 leaves req.body undefined on GET requests; @as-integrations/express4
+  // fails hard if req.body is falsy, so ensure it's always at least {}.
+  (req, _res, next) => { req.body = req.body ?? {}; next(); },
   expressMiddleware(server, {
     context: createContext,
   })
