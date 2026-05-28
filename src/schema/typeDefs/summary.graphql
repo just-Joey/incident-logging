@@ -1,0 +1,11 @@
+type IncidentSummary {
+  summary: String!
+  rootCause: String!
+  impact: String!
+  nextSteps: [String!]!
+  riskScore: Int!
+}
+
+extend type Query {
+  summarizeIncident(incidentId: ID!): IncidentSummary!
+}

@@ -6,6 +6,7 @@ import { incidentResolvers } from './resolvers/incident.js'
 import { errorResolvers } from './resolvers/error.js'
 import { eventResolvers } from './resolvers/event.js'
 import { dashboardResolvers } from './resolvers/dashboard.js'
+import { summaryResolver } from './resolvers/summary.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -17,4 +18,5 @@ export const resolvers = mergeResolvers([
   errorResolvers,
   eventResolvers,
   dashboardResolvers,
+  summaryResolver,
 ])

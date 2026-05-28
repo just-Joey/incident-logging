@@ -17,6 +17,9 @@ const config = {
     region: process.env.AWS_REGION || 'us-east-1',
     isLambda: !!process.env.AWS_EXECUTION_ENV,  // Lambda sets this automatically
   },
+  anthropic: {
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  },
 }
 
 // Fail fast if critical config is missing
